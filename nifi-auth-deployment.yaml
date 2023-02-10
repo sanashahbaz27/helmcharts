@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert
+    kompose.version: 1.28.0 (c4137012e)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nifi-auth
+  name: nifi-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: nifi-auth
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert
+        kompose.version: 1.28.0 (c4137012e)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/helmdeploy-default: "true"
+        io.kompose.service: nifi-auth
+    spec:
+      containers:
+        - env:
+            - name: NIFI_WEB_HTTPS_PORT
+              value: "8443"
+            - name: NIFI_WEB_PROXY_HOST
+              value: 75.119.134.195:9556
+          image: apache/nifi:1.15.0
+          name: nifi-https
+          ports:
+            - containerPort: 8443
+          resources: {}
+      restartPolicy: Always
+status: {}
